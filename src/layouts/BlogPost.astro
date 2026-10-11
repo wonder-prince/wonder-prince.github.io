@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+
+type Props = CollectionEntry<'blog'>['data'];
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="article-page page-shell">
+			<article>
+				<header class="article-header">
+					<p class="eyebrow">FIELD NOTE / 探索日志</p>
+					<h1>{title}</h1>
+					<p class="article-description">{description}</p>
+					<div class="article-date">
+						<FormattedDate date={pubDate} />
+						{updatedDate && <span>更新于 <FormattedDate date={updatedDate} /></span>}
+					</div>
+				</header>
+				{heroImage && (
+					<div class="hero-image">
+						<Image width={1200} height={620} src={heroImage} alt="" />
+					</div>
+				)}
+				<div class="article-body prose"><slot /></div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.article-page {
+		padding-top: 160px;
+		padding-bottom: 120px;
+	}
+
+	.article-header {
+		max-width: 900px;
+		margin: 0 auto 54px;
+		text-align: center;
+	}
+
+	.article-header h1 {
+		margin: 0;
+		font-size: clamp(2.7rem, 7vw, 5.8rem);
+		letter-spacing: -0.06em;
+	}
+
+	.article-description {
+		max-width: 640px;
+		margin: 24px auto 0;
+		color: var(--text-secondary);
+		font-size: 1.05rem;
+	}
+
+	.article-date {
+		display: flex;
+		justify-content: center;
+		gap: 16px;
+		margin-top: 20px;
+		color: var(--text-muted);
+		font: 550 0.7rem/1 var(--font-mono);
+	}
+
+	.hero-image {
+		max-width: 1080px;
+		margin: 0 auto 60px;
+		overflow: hidden;
+		border: 1px solid var(--border);
+		border-radius: 24px;
+	}
+
+	.hero-image img {
+		display: block;
+		width: 100%;
+	}
+
+	.article-body {
+		max-width: 760px;
+		margin: 0 auto;
+	}
+</style>
